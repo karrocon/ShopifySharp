@@ -1,6 +1,5 @@
 ﻿using GraphQlClient;
-using GraphQlClient.Client;
-using GraphQlClient.Relay.Client;
+using GraphQlClient.Relay;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -43,40 +42,19 @@ namespace ShopifySharp.Graph
 
         #region Event handlers
 
-        private void ShopifyGraphService_OnGraphQlError(object sender, GraphQlEventArgs e)
+        private void ShopifyGraphService_OnGraphQlError(object sender, IGraphQlEventArgs e)
         {
-            var shopifyResponse = (GraphResponseMessage)e.Response;
-
-            var availableAfterNextRequest = shopifyResponse.Extensions.Cost.ThrottleStatus.CurrentlyAvailable - shopifyResponse.Extensions.Cost.RequestedQueryCost;
-            if (availableAfterNextRequest < 0)
-            {
-                var minimumSecondsUntilNextRequest = Math.Ceiling(-availableAfterNextRequest / shopifyResponse.Extensions.Cost.ThrottleStatus.RestoreRate);
-                Thread.Sleep(TimeSpan.FromSeconds(minimumSecondsUntilNextRequest));
-            }
+            WaitUntilNextRequest((GraphResponseMessage)e.Response);
         }
 
-        private void ShopifyGraphService_OnBeforeQueryPage(object sender, GraphQlEventArgs e)
+        private void ShopifyGraphService_OnBeforeQueryPage(object sender, IGraphQlEventArgs e)
         {
-            var shopifyResponse = (GraphResponseMessage)e.Response;
-
-            var availableAfterNextRequest = shopifyResponse.Extensions.Cost.ThrottleStatus.CurrentlyAvailable - shopifyResponse.Extensions.Cost.RequestedQueryCost;
-            if (availableAfterNextRequest < 0)
-            {
-                var minimumSecondsUntilNextRequest = Math.Ceiling(-availableAfterNextRequest / shopifyResponse.Extensions.Cost.ThrottleStatus.RestoreRate);
-                Thread.Sleep(TimeSpan.FromSeconds(minimumSecondsUntilNextRequest));
-            }
+            WaitUntilNextRequest((GraphResponseMessage)e.Response);
         }
 
         #endregion
 
         #region Public methods
-
-        public Task<TResult> MutateAsync<TResult>(IMutation<TResult> mutation, uint retries = 0)
-        {
-            var request = mutation.ToGraphQlRequestMessage();
-
-            return SendAsync<TResult>(request, retries);
-        }
 
         public async Task<IEnumerable<QueryRoot>> QueryAsync(string query, string variables, uint retries = 0)
         {
@@ -92,6 +70,20 @@ namespace ShopifySharp.Graph
         public Task<IEnumerable<QueryRoot>> QueryAsync(Action<IGraphQueryableObject<QueryRoot>> queryBuilder, dynamic variables = null, uint retries = 0)
         {
             return QueryAsync(GraphQueryStringBuilder.Build(queryBuilder), variables == null ? null : JsonConvert.SerializeObject(variables), retries);
+        }
+
+        #endregion
+
+        #region Private helpers
+
+        private void WaitUntilNextRequest(GraphResponseMessage responseMessage)
+        {
+            var availableAfterNextRequest = responseMessage.Extensions.Cost.ThrottleStatus.CurrentlyAvailable - responseMessage.Extensions.Cost.RequestedQueryCost;
+            if (availableAfterNextRequest < 0)
+            {
+                var minimumSecondsUntilNextRequest = Math.Ceiling(-availableAfterNextRequest / responseMessage.Extensions.Cost.ThrottleStatus.RestoreRate);
+                Thread.Sleep(TimeSpan.FromSeconds(minimumSecondsUntilNextRequest));
+            }
         }
 
         #endregion

@@ -1,4 +1,4 @@
-﻿using GraphQlClient.Client;
+﻿using GraphQlClient;
 
 namespace ShopifySharp.Graph
 {

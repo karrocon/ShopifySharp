@@ -1,4 +1,4 @@
-﻿using GraphQlClient.Relay.Entities;
+﻿using GraphQlClient.Relay;
 
 namespace ShopifySharp.Graph
 {
