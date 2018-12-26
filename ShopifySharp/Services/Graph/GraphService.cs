@@ -47,10 +47,10 @@ namespace ShopifySharp.Graph
         {
             var shopifyResponse = (GraphResponseMessage)e.Response;
 
-            var costAfterNextRequest = shopifyResponse.Extensions.Cost.ThrottleStatus.CurrentlyAvailable - shopifyResponse.Extensions.Cost.RequestedQueryCost;
-            if (costAfterNextRequest < 0)
+            var availableAfterNextRequest = shopifyResponse.Extensions.Cost.ThrottleStatus.CurrentlyAvailable - shopifyResponse.Extensions.Cost.RequestedQueryCost;
+            if (availableAfterNextRequest < 0)
             {
-                var minimumSecondsUntilNextRequest = Math.Ceiling(-costAfterNextRequest / shopifyResponse.Extensions.Cost.ThrottleStatus.RestoreRate);
+                var minimumSecondsUntilNextRequest = Math.Ceiling(-availableAfterNextRequest / shopifyResponse.Extensions.Cost.ThrottleStatus.RestoreRate);
                 Thread.Sleep(TimeSpan.FromSeconds(minimumSecondsUntilNextRequest));
             }
         }
@@ -59,10 +59,10 @@ namespace ShopifySharp.Graph
         {
             var shopifyResponse = (GraphResponseMessage)e.Response;
 
-            var costAfterNextRequest = shopifyResponse.Extensions.Cost.ThrottleStatus.CurrentlyAvailable - shopifyResponse.Extensions.Cost.RequestedQueryCost;
-            if (costAfterNextRequest < 0)
+            var availableAfterNextRequest = shopifyResponse.Extensions.Cost.ThrottleStatus.CurrentlyAvailable - shopifyResponse.Extensions.Cost.RequestedQueryCost;
+            if (availableAfterNextRequest < 0)
             {
-                var minimumSecondsUntilNextRequest = Math.Ceiling(-costAfterNextRequest / shopifyResponse.Extensions.Cost.ThrottleStatus.RestoreRate);
+                var minimumSecondsUntilNextRequest = Math.Ceiling(-availableAfterNextRequest / shopifyResponse.Extensions.Cost.ThrottleStatus.RestoreRate);
                 Thread.Sleep(TimeSpan.FromSeconds(minimumSecondsUntilNextRequest));
             }
         }
