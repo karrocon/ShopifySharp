@@ -89,11 +89,6 @@ namespace ShopifySharp.Graph
             return (await QueryAllPagesAsync<GraphResponseMessage, QueryRoot>(request, retries)).Select(x => x.Data);
         }
 
-        public Task<IEnumerable<QueryRoot>> QueryAsync(Action<IGraphQueryableObject<QueryRoot>> queryBuilder, uint retries = 0)
-        {
-            return QueryAsync(queryBuilder, null, retries);
-        }
-
         public Task<IEnumerable<QueryRoot>> QueryAsync(Action<IGraphQueryableObject<QueryRoot>> queryBuilder, dynamic variables = null, uint retries = 0)
         {
             return QueryAsync(GraphQueryStringBuilder.Build(queryBuilder), variables == null ? null : JsonConvert.SerializeObject(variables), retries);
