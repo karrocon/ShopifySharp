@@ -1,5 +1,9 @@
-﻿namespace ShopifySharp.Graph
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace ShopifySharp.Graph
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum CountryCode
     {
         AD, AE, AF, AG, AI, AL, AM, AN, AO, AR, AT, AU, AW, AX, AZ,

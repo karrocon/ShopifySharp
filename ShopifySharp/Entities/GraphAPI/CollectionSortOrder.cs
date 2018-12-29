@@ -1,5 +1,9 @@
-﻿namespace ShopifySharp.Graph
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+
+namespace ShopifySharp.Graph
 {
+    [JsonConverter(typeof(StringEnumConverter))]
     public enum CollectionSortOrder
     {
         ALPHA_ASC,

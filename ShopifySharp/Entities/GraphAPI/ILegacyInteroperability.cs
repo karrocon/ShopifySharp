@@ -2,6 +2,6 @@
 {
     public interface ILegacyInteroperability
     {
-        ulong LegacyResourceId { get; set; }
+        ulong? LegacyResourceId { get; set; }
     }
 }

@@ -1,8 +1,11 @@
 ﻿using GraphQlClient.Relay;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Collections.Generic;
 
 namespace ShopifySharp.Graph
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore, NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class Shop : IHasMetafields, INode
     {
         #region Connections
@@ -28,11 +31,11 @@ namespace ShopifySharp.Graph
         public IEnumerable<ShopAlert> Alerts { get; set; }
         public string AnalyticsToken { get; set; }
         public MailingAddress BillingAddress { get; set; }
-        public bool CheckoutApiSupported { get; set; }
+        public bool? CheckoutApiSupported { get; set; }
         public string ContactEmail { get; set; }
         public CountriesInShippingZones CountriesInShippingZones { get; set; }
-        public CurrencyCode CurrencyCode { get; set; }
-        public ShopCustomerAccountsSetting CustomerAccounts { get; set; }
+        public CurrencyCode? CurrencyCode { get; set; }
+        public ShopCustomerAccountsSetting? CustomerAccounts { get; set; }
         public string Description { get; set; }
         public string Email { get; set; }
         public IEnumerable<CurrencyCode> EnabledPresentmentCurrencies { get; set; }
@@ -49,20 +52,20 @@ namespace ShopifySharp.Graph
         public PaymentSettings PaymentSettings { get; set; }
         public ShopPlan Plan { get; set; }
         public Domain PrimaryDomain { get; set; }
-        public int PublicationCount { get; set; }
+        public int? PublicationCount { get; set; }
         public ShopResourceLimits ResourceLimits { get; set; }
         // This should validate as URL https://help.shopify.com/en/api/graphql-admin-api/reference/scalar/url
         public string RichTextEditorUrl { get; set; }
         public SearchFilterOptions SearchFilters { get; set; }
-        public bool SetupRequired { get; set; }
+        public bool? SetupRequired { get; set; }
         public IEnumerable<CountryCode> ShipsToCountries { get; set; }
-        public bool TaxShipping { get; set; }
-        public bool TaxesIncluded { get; set; }
+        public bool? TaxShipping { get; set; }
+        public bool? TaxesIncluded { get; set; }
         public string TimezoneOffset { get; set; }
-        public int TimezoneOffsetMinutes { get; set; }
+        public int? TimezoneOffsetMinutes { get; set; }
         // This should validate as URL https://help.shopify.com/en/api/graphql-admin-api/reference/scalar/url
         public string Url { get; set; }
-        public WeightUnit WeightUnit { get; set; }
+        public WeightUnit? WeightUnit { get; set; }
 
         #endregion
     }

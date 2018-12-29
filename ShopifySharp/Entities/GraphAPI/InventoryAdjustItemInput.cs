@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ShopifySharp.Graph
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore, NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class InventoryAdjustItemInput
     {
-        [JsonProperty("availableDelta")]
-        public int AvailableDelta { get; set; }
-        [JsonProperty("inventoryItemId")]
+        public int? AvailableDelta { get; set; }
         public string InventoryItemId { get; set; }
     }
 }

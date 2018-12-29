@@ -1,7 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
 
 namespace ShopifySharp.Graph
 {
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore, NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class App : INode
     {
         public string ApiKey { get; set; }
@@ -12,7 +15,7 @@ namespace ShopifySharp.Graph
         public Image Banner { get; set; }
         public string Description { get; set; }
         public string DeveloperName { get; set; }
-        public bool Embedded { get; set; }
+        public bool? Embedded { get; set; }
         public IEnumerable<FailedRequirement> FailedRequirements { get; set; }
         public IEnumerable<string> Features { get; set; }
         public AppFeedback Feedback { get; set; }
@@ -27,9 +30,9 @@ namespace ShopifySharp.Graph
         public string PricingDetailsSummary { get; set; }
         // This should validate Url https://help.shopify.com/en/api/graphql-admin-api/reference/scalar/url
         public string PrivacyPolicyUrl { get; set; }
-        public bool Published { get; set; }
+        public bool? Published { get; set; }
         public IEnumerable<Image> Screenshots { get; set; }
-        public bool ShopifyDeveloped { get; set; }
+        public bool? ShopifyDeveloped { get; set; }
         public string Title { get; set; }
         public string UninstallMessage { get; set; }
     }

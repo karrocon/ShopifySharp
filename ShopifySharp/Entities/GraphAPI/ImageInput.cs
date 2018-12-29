@@ -1,15 +1,13 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace ShopifySharp.Graph
 {
-    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore)]
+    [JsonObject(ItemNullValueHandling = NullValueHandling.Ignore, NamingStrategyType = typeof(CamelCaseNamingStrategy))]
     public class ImageInput
     {
-        [JsonProperty("altText")]
         public string AltText { get; set; }
-        [JsonProperty("id")]
         public string Id { get; set; }
-        [JsonProperty("src")]
         public string Src { get; set; }
     }
 }
