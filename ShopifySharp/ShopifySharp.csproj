@@ -15,7 +15,7 @@
     <PackageTags>shopify,ecommerce</PackageTags>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="karrocon.graphqlclient.relay" Version="0.6.0" />
+    <PackageReference Include="karrocon.graphqlclient.relay" Version="0.7.0" />
     <PackageReference Include="microsoft.csharp" Version="4.5.0" />
     <PackageReference Include="microsoft.extensions.primitives" Version="1.1.0" />
     <PackageReference Include="newtonsoft.json" Version="12.0.1" />

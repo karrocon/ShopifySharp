@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -44,7 +45,10 @@ namespace ShopifySharp.Graph
 
         private void ShopifyGraphService_OnGraphQlError(object sender, IGraphQlEventArgs e)
         {
-            WaitUntilNextRequest((GraphResponseMessage)e.Response);
+            if (e.Response != null)
+            {
+                WaitUntilNextRequest((GraphResponseMessage)e.Response);
+            }
         }
 
         private void ShopifyGraphService_OnBeforeQueryPage(object sender, IGraphQlEventArgs e)
@@ -56,7 +60,7 @@ namespace ShopifySharp.Graph
 
         #region Public methods
 
-        public async Task<IEnumerable<QueryRoot>> QueryAsync(string query, string variables, uint retries = 0)
+        public async Task<IEnumerable<QueryRoot>> QueryAsync(string query, string variables)
         {
             var request = new GraphQlRequestMessage
             {
@@ -64,12 +68,21 @@ namespace ShopifySharp.Graph
                 Variables = variables
             };
 
-            return (await QueryAllPagesAsync<GraphResponseMessage, QueryRoot>(request, retries)).Select(x => x.Data);
+            return (await QueryAllPagesAsync<GraphResponseMessage, QueryRoot>(request)).Select(x => x.Data);
         }
 
-        public Task<IEnumerable<QueryRoot>> QueryAsync(Action<IGraphQueryableObject<QueryRoot>> queryBuilder, dynamic variables = null, uint retries = 0)
+        public Task<IEnumerable<QueryRoot>> QueryAsync(Action<IGraphQueryableObject<QueryRoot>> queryBuilder, dynamic variables = null)
         {
-            return QueryAsync(GraphQueryStringBuilder.Build(queryBuilder), variables == null ? null : JsonConvert.SerializeObject(variables), retries);
+            return QueryAsync(GraphQueryStringBuilder.Build(queryBuilder), variables == null ? null : JsonConvert.SerializeObject(variables));
+        }
+
+        #endregion
+
+        #region Overriden methods
+
+        protected override bool ShouldRetry(GraphQlRequestMessage request, HttpResponseMessage response)
+        {
+            return response.IsSuccessStatusCode;
         }
 
         #endregion
